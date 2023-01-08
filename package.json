@@ -1,22 +1,39 @@
 {
-  "name": "Templating-Engine",
+  "name": "project-template-generator",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "repository": "https://github.com/HamishFleming/Templating-Engine",
-  "author": "HamishFleming <50164339+HamishFleming@users.noreply.github.com>",
-  "license": "MIT",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "build": "tsc && shx rm -rf dist/templates && shx cp -r src/templates dist",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
   },
+  "bin": {
+    "generate-template": "./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@types/inquirer": "^9.0.3",
-    "@types/node": "^18.11.18",
-    "nodemon": "^2.0.20",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "@types/ejs": "^3.0.2",
+    "@types/inquirer": "^6.5.0",
+    "@types/node": "^14.11.2",
+    "@types/shelljs": "^0.8.7",
+    "nodemon": "^2.0.3",
+    "shx": "^0.3.2",
+    "ts-node": "^8.8.2",
+    "typescript": "~4.7.0",
+    "gts": "^3.1.1"
   },
-  "packageManager": "yarn@3.3.1",
   "dependencies": {
-    "inquirer": "^9.1.4"
+    "ejs": "^3.0.2",
+    "inquirer": "^7.1.0",
+    "shelljs": "^0.8.3"
   }
 }
