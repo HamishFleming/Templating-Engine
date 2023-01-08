@@ -1,0 +1,22 @@
+{
+  "name": "Templating-Engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/HamishFleming/Templating-Engine",
+  "author": "HamishFleming <50164339+HamishFleming@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^18.11.18",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "packageManager": "yarn@3.3.1",
+  "dependencies": {
+    "inquirer": "^9.1.4"
+  }
+}
