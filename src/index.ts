@@ -67,6 +67,46 @@ function createProject(projectPath: string) {
    return true;
 }
 
+/**
+ * Processes a template file to find fields to replace
+ *
+ * Matches ejs tags like <%= projectName %>
+ * or conditional ternary operators like <%= projectName ? 'yes' : 'no' %> or
+ * short ternary operators like <%= projectName ?? 'no' %> where only the first
+ * value is used if it is not null or undefined
+ *
+ * @param content
+ * @returns {string[]}
+ */
+function parseFieldsToReplace(content: string) {
+   const fields = content.match(/<%=\s[a-zA-Z]+/g);
+   if (!fields) {
+      return [];
+   }
+   return fields.map(field => {
+      return field.replace(/<%=\s*|\s*%>/g, '');
+   });
+}
+
+/**
+ * Prompts the user for the values of the fields to replace
+ * during the template creation process
+ *
+ * @param fields
+ * @returns {Promise<any>}
+   */
+function promptForMissingOptions(fields: string[]) {
+   const questions: any[] = [];
+   fields.forEach(field => {
+      questions.push({
+         type: 'input',
+         name: field,
+         message: `Please enter a value for ${field}:`
+      });
+   });
+   return inquirer.prompt(questions);
+}
+
 const SKIP_FILES = ['node_modules', '.template.json'];
 
 function createDirectoryContents(templatePath: string, projectName: string) {
@@ -85,10 +125,22 @@ function createDirectoryContents(templatePath: string, projectName: string) {
       if (stats.isFile()) {
          // read file content and transform it using template engine
          let contents = fs.readFileSync(origFilePath, 'utf8');
-         contents = template.render(contents, { projectName });
-         // write file to destination folder
-         const writePath = path.join(CURR_DIR, projectName, file);
-         fs.writeFileSync(writePath, contents, 'utf8');
+
+         // replace fields with actual values
+         const fields = parseFieldsToReplace(contents);
+         console.log(fields);
+         if (fields.length) {
+            promptForMissingOptions(fields).then(answers => {
+               contents = template.render(contents, answers);
+               // write file to destination folder
+               const writePath = path.join(CURR_DIR, projectName, file);
+               fs.writeFileSync(writePath, contents, 'utf8');
+            });
+         } else {
+            // write file to destination folder
+            const writePath = path.join(CURR_DIR, projectName, file);
+            fs.writeFileSync(writePath, contents, 'utf8');
+         }
       } else if (stats.isDirectory()) {
          // create folder in destination folder
          fs.mkdirSync(path.join(CURR_DIR, projectName, file));
