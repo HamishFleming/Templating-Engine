@@ -33,6 +33,7 @@ typings/
 # Dist #
 dist/
 tsconfig.build.json
+run/
 
 # IDE #
 .idea/

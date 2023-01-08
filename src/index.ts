@@ -28,7 +28,7 @@ export interface CliOptions {
    tartgetPath: string
 }
 
-const CURR_DIR = process.cwd();
+const CURR_DIR = process.cwd() + '/run';
 
 inquirer.prompt(QUESTIONS).then(answers => {
    const projectChoice = answers['template'];
